@@ -2,18 +2,28 @@
   - name: "Install development environment"
     hosts: localhost
     connection: local
-    become: true
-    become_method: sudo
+    become: false
     tasks:
 
     - name: "Install fish shell repository"
+      become: true
+      become_method: sudo
       ansible.builtin.apt_repository:
         repo: ppa:fish-shell/release-3
         state: present
 
     - name: "Install fish shell"
+      become: true
+      become_method: sudo
       ansible.builtin.apt:
         name: fish
         state: present
         update_cache: yes
-      
+
+    - name: "Set fish as default shell"
+      become: true
+      become_method: sudo
+      user:
+        name: "{{ ansible_env.USER }}"
+        shell: /bin/fish  
+
