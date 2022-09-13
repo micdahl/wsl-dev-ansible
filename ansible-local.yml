@@ -27,3 +27,7 @@
         name: "{{ ansible_env.USER }}"
         shell: /bin/fish  
 
+    - name: "Add ansible to fish path"
+      ansible.builtin.lineinfile: 
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "fish_add_path {{ ansible_env.HOME }}/.local/bin"
