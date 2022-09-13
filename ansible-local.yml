@@ -1,0 +1,19 @@
+---
+  - name: "Install development environment"
+    hosts: localhost
+    connection: local
+    become: true
+    become_method: sudo
+    tasks:
+
+    - name: "Install fish shell repository"
+      ansible.builtin.apt_repository:
+        repo: ppa:fish-shell/release-3
+        state: present
+
+    - name: "Install fish shell"
+      ansible.builtin.apt:
+        name: fish
+        state: present
+        update_cache: yes
+      
