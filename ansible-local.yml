@@ -31,3 +31,13 @@
       ansible.builtin.lineinfile: 
         path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
         line: "fish_add_path {{ ansible_env.HOME }}/.local/bin"
+
+    - name: "Install oh my fish"
+      ansible.builtin.shell:
+        cmd: curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install > install && fish install --noninteractive --yes && rm install
+        creates: "{{ ansible_env.HOME }}/.local/share/omf"
+
+    - name: "Install bobthefish theme"
+      ansible.builtin.shell:
+        cmd: fish -c 'omf install bobthefish'
+
