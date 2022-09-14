@@ -30,6 +30,7 @@
     - name: "Initial start fish"
       ansible.builtin.shell:
         cmd: fish -c 'echo test'
+        creates: "{{ ansible_env.HOME }}/.config/fish/config.fish"
 
     - name: "Add ansible to fish path"
       ansible.builtin.lineinfile: 
@@ -44,4 +45,5 @@
     - name: "Install bobthefish theme"
       ansible.builtin.shell:
         cmd: fish -c 'omf install bobthefish'
+        creates: "{{ ansible_env.HOME }}/.local/share/omf/themes/bobthefish"
 
