@@ -54,3 +54,8 @@
         cmd: fish -c 'omf install bobthefish'
         creates: "{{ ansible_env.HOME }}/.local/share/omf/themes/bobthefish"
 
+    - name: "Add suport for nerd font"
+      ansible.builtin.lineinfile: 
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "set -g theme_nerd_fonts yes"
+
