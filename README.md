@@ -2,7 +2,7 @@
 
 ## Preliminaries on the Windows Host
 1. Install Terminal from the Microsoft Store
-2. Install Caskayda Cove Nerd Font from https://www.nerdfonts.com/font-downloads and set it as Font for the Terminal Ubuntu Profile (Settings -> Ubuntu -> Display)
+2. Install Caskayda Cove Nerd Font from https://www.nerdfonts.com/font-downloads and set it as Font for the Terminal Ubuntu Profile (Settings -> Display)
 
 ## Preliminaries on the fresh System
 1. Set locale to US via `sudo dpkg-reconfigure`
