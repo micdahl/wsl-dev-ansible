@@ -1,0 +1,43 @@
+---
+- name: "Install rails development environment"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Checkout rbenv"
+      ansible.builtin.shell:
+        cmd: "git clone https://github.com/rbenv/rbenv.git {{ ansible_env.HOME }}/.rbenv"
+        creates: "{{ ansible_env.HOME }}/.rbenv"
+
+    - name: "Compile bash extension"
+      ansible.builtin.shell:
+        cmd: "cd {{ ansible_env.HOME }}/.rbenv && src/configure && make -C src"
+        creates: "{{ ansible_env.HOME }}/.rbenv/src/realpath.o"
+
+    - name: "Add rbenv to fish path"
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "set -Ux fish_user_paths $HOME/.rbenv/bin $fish_user_paths"
+
+    - name: "rbenv init"
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "status --is-interactive; and rbenv init - fish | source"
+
+    - name: "Create Plugins Path"
+      file:
+        path: "{{ ansible_env.HOME }}/.rbenv/plugins"
+        state: directory
+
+    - name: "Checkout ruby-build"
+      ansible.builtin.shell:
+        cmd: "git clone https://github.com/rbenv/ruby-build.git {{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
+        creates: "{{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
+
+    - name: "Install poppler-utils"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: poppler-utils
+        state: present
+        update_cache: yes
