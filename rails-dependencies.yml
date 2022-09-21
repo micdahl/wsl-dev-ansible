@@ -43,3 +43,52 @@
         pkg:
           - libffi-dev
           - libglib2.0-dev
+
+    - name: "Install nvm"
+      ansible.builtin.shell:
+        cmd: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash"
+        creates: "{{ ansible_env.HOME }}/.nvm/nvm.sh"
+
+    - name: "Install bass"
+      ansible.builtin.shell:
+        cmd: fish -c 'omf install bass'
+        creates: "{{ ansible_env.HOME }}/.local/share/omf/pkg/bass"
+
+    - name: "Add nvm function to fish"
+      copy:
+        dest: "{{ ansible_env.HOME }}/.config/fish/functions/nvm.fish"
+        content: |
+          function nvm
+            bass source ~/.nvm/nvm.sh --no-use ';' nvm $argv
+          end
+
+    - name: "Install node.js lts release"
+      ansible.builtin.shell:
+        cmd: fish -c 'nvm install --lts'
+        creates: "{{ ansible_env.HOME }}/.nvm/versions/node"
+
+    - name: "Install python 2.7"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: python2.7
+        state: present
+        update_cache: yes
+
+    - name: "Install google chrome package"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        deb: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+        state: present
+
+    - name: "Download chromedriver"
+      ansible.builtin.shell:
+        cmd: curl -o {{ ansible_env.HOME }}/downloads/chromedriver.zip https://chromedriver.storage.googleapis.com/$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$(google-chrome --version | egrep -o "[0-9]{3}" | egrep -m 1 -o "[0-9]{3}"))/chromedriver_linux64.zip
+        creates: "{{ ansible_env.HOME }}/downloads/chromedriver.zip"
+
+    - name: "Unpack"
+      ansible.builtin.unarchive:
+        src: "{{ ansible_env.HOME }}/downloads/chromedriver.zip"
+        dest: "{{ ansible_env.HOME }}/.local/bin"
+        creates: "{{ ansible_env.HOME }}/.local/bin/chromedriver"
