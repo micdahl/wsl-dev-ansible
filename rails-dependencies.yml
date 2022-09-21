@@ -34,10 +34,12 @@
         cmd: "git clone https://github.com/rbenv/ruby-build.git {{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
         creates: "{{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
 
-    - name: "Install poppler-utils"
+    - name: "Install gem dependencies"
       become: true
       become_method: sudo
       ansible.builtin.apt:
-        name: poppler-utils
         state: present
         update_cache: yes
+        pkg:
+          - libffi-dev
+          - libglib2.0-dev
