@@ -1,10 +1,9 @@
 ---
-  - name: "Install development environment"
-    hosts: localhost
-    connection: local
-    become: false
-    tasks:
-
+- name: "Install development environment"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
     - name: "Install python3-venv"
       become: true
       ansible.builtin.apt:
@@ -32,7 +31,7 @@
       become_method: sudo
       user:
         name: "{{ ansible_env.USER }}"
-        shell: /bin/fish  
+        shell: /bin/fish
 
     - name: "Initial start fish"
       ansible.builtin.shell:
@@ -40,7 +39,7 @@
         creates: "{{ ansible_env.HOME }}/.config/fish/config.fish"
 
     - name: "Add ansible to fish path"
-      ansible.builtin.lineinfile: 
+      ansible.builtin.lineinfile:
         path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
         line: "fish_add_path {{ ansible_env.HOME }}/.local/bin"
 
@@ -55,7 +54,6 @@
         creates: "{{ ansible_env.HOME }}/.local/share/omf/themes/bobthefish"
 
     - name: "Add suport for nerd font"
-      ansible.builtin.lineinfile: 
+      ansible.builtin.lineinfile:
         path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
         line: "set -g theme_nerd_fonts yes"
-
