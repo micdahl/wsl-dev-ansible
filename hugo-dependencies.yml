@@ -1,0 +1,13 @@
+---
+- name: "Install hugo"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Install hugo"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: hugo
+        state: present
+        update_cache: yes
