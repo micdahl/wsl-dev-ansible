@@ -1,0 +1,31 @@
+---
+- name: "Install vim"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Install neovim repository"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt_repository:
+        repo: ppa:neovim-ppa/unstable
+        state: present
+
+    - name: "Install neovim"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: neovim
+        state: present
+        update_cache: yes
+
+    - name: "Install tools for telescope"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        pkg: 
+          - ripgrep 
+          - fd-find
+        state: present
+        update_cache: yes
+
