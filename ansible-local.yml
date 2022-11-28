@@ -43,15 +43,15 @@
         path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
         line: "fish_add_path {{ ansible_env.HOME }}/.local/bin"
 
-    - name: "Install oh my fish"
+    - name: "Install fisher"
       ansible.builtin.shell:
-        cmd: curl https://raw.githubusercontent.com/oh-my-fish/oh-my-fish/master/bin/install > install && fish install --noninteractive --yes && rm install
-        creates: "{{ ansible_env.HOME }}/.local/share/omf"
+        cmd: fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'
+        creates: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
 
     - name: "Install bobthefish theme"
       ansible.builtin.shell:
-        cmd: fish -c 'omf install bobthefish'
-        creates: "{{ ansible_env.HOME }}/.local/share/omf/themes/bobthefish"
+        cmd: fish -c 'fisher install oh-my-fish/theme-bobthefish'
+        creates: "{{ ansible_env.HOME }}/.config/fish/functions/bobthefish_display_colors.fish"
 
     - name: "Add suport for nerd font"
       ansible.builtin.lineinfile:
