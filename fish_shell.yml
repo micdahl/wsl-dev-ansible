@@ -53,7 +53,29 @@
         cmd: fish -c 'fisher install oh-my-fish/theme-bobthefish'
         creates: "{{ ansible_env.HOME }}/.config/fish/functions/bobthefish_display_colors.fish"
 
+    - name: "Install z"
+      ansible.builtin.shell:
+        cmd: fish -c 'fisher install jethrokuan/z'
+        creates: "{{ ansible_env.HOME }}/.config/fish/conf.d/z.fish"
+
+    - name: "Install fzf dependencies"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        pkg:
+          - fzf
+          - fd-find
+          - bat
+        state: present
+        update_cache: yes
+
+    - name: "Install fzf"
+      ansible.builtin.shell:
+        cmd: fish -c 'fisher install PatrickF1/fzf.fish'
+        creates: "{{ ansible_env.HOME }}/.config/fish/conf.d/fzf.fish"
+
     - name: "Add suport for nerd font"
       ansible.builtin.lineinfile:
         path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
         line: "set -g theme_nerd_fonts yes"
+    
