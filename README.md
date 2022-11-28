@@ -13,5 +13,5 @@
 
 ## Run
 
-Run via `ansible-playbook ansible-local.yml --ask-become-pass` to run everything localy
+Run via `ansible-playbook fish_shell.yml --ask-become-pass` to run everything localy
 Do same for `odoo-14-dependencies.yml` and `rails-dependencies.yml`.
