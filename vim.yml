@@ -29,3 +29,7 @@
         state: present
         update_cache: yes
 
+    - name: "Use nvim for vim"
+      ansible.builtin.lineinfile:
+        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
+        line: "alias vim nvim"
