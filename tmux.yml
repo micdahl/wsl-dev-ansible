@@ -1,0 +1,24 @@
+---
+- name: "Install tmux"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Install tmux"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: tmux
+        state: present
+        update_cache: yes
+
+    - name: "Tmux Plugin Manager"
+      ansible.builtin.git:
+        repo: "https://github.com/tmux-plugins/tpm"
+        dest:  "{{ ansible_env.HOME }}/.tmux/plugins/tpm"
+        
+    - name: "add tmux template"
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/tmux.conf"
+        dest: "{{ ansible_env.HOME }}/.tmux.conf"
+
