@@ -53,6 +53,11 @@
         cmd: fish -c 'fisher install oh-my-fish/theme-bobthefish'
         creates: "{{ ansible_env.HOME }}/.config/fish/functions/bobthefish_display_colors.fish"
 
+    - name: "Install bass"
+      ansible.builtin.shell:
+        cmd: fish -c 'fisher install edc/bass'
+        creates: "{{ ansible_env.HOME }}/.config/fish/functions/bass.fish"
+
     - name: "Install z"
       ansible.builtin.shell:
         cmd: fish -c 'fisher install jethrokuan/z'
