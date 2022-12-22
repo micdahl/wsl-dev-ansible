@@ -99,3 +99,13 @@
         name: imagemagick
         state: present
 
+    - name: "Install ruby 2.6.6 dependencies"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: libreadline-dev
+        state: present
+
+    - name: "Install ruby 2.6.6"
+      ansible.builtin.shell:
+        cmd: rbenv install 2.6.6
