@@ -15,6 +15,6 @@
 
     - name: "add neovim template"
       ansible.builtin.copy:
-        src: "{{ playbook_dir }}/templates/neovim"
+        src: "{{ playbook_dir }}/templates/neovim/"
         dest: "{{ ansible_env.HOME }}/.config/nvim"
 
