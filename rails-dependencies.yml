@@ -130,3 +130,8 @@
       ansible.builtin.shell:
         cmd: fish -i -c 'rbenv shell 2.6.6 && gem install mailcatcher'
         creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6/bin/mailcatcher"
+
+    - name: "Install localtunnel"
+      community.general.npm:
+        name: localtunnel
+        global: true
