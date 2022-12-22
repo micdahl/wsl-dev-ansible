@@ -1,0 +1,9 @@
+[submodule "templates/fish"]
+	path = templates/fish
+	url = git@github.com:micdahl/config.fish.git
+[submodule "templates/tmux"]
+	path = templates/tmux
+	url = git@github.com:micdahl/tmux_config.git
+[submodule "templates/neovim"]
+	path = templates/neovim
+	url = git@github.com:micdahl/neovim-config.git

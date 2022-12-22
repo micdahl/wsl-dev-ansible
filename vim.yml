@@ -15,7 +15,9 @@
       become: true
       become_method: sudo
       ansible.builtin.apt:
-        name: neovim
+        pkg: 
+          - neovim
+          - python3-neovim
         state: present
         update_cache: yes
 
@@ -27,18 +29,11 @@
           - ripgrep 
           - fd-find
         state: present
-        update_cache: yes
-
-    - name: "Use nvim for vim"
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
-        line: "alias vim nvim"
 
     - name: "Python language server"
       ansible.builtin.pip:
         name: 
-          - python-lsp-server
-          - python-lsp-black
+          - black
           - ropevim
           - pynvim
 

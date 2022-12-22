@@ -19,6 +19,6 @@
         
     - name: "add tmux template"
       ansible.builtin.template:
-        src: "{{ playbook_dir }}/templates/tmux.conf"
+        src: "{{ playbook_dir }}/templates/tmux/tmux.conf"
         dest: "{{ ansible_env.HOME }}/.tmux.conf"
 
