@@ -93,6 +93,13 @@
         name: imagemagick
         state: present
 
+    - name: "Install Poppler Utils for pdf preview"
+      become: true
+      become_method: sudo
+      ansible.builtin.apt:
+        name: poppler-utils
+        state: present
+
     - name: "Install ruby 2.6.6 dependencies"
       become: true
       become_method: sudo
@@ -109,3 +116,8 @@
       ansible.builtin.shell:
         cmd: fish -i -c 'rbenv shell 2.6.6 && gem install rails -v 6.1.7'
         creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6/bin/rails"
+
+    - name: "Install mailcatcher"
+      ansible.builtin.shell:
+        cmd: fish -i -c 'rbenv shell 2.6.6 && gem install mailcatcher'
+        creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6/bin/mailcatcher"
