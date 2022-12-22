@@ -9,12 +9,6 @@
         cmd: "git clone https://github.com/rbenv/rbenv.git {{ ansible_env.HOME }}/.rbenv"
         creates: "{{ ansible_env.HOME }}/.rbenv"
 
-    - name: "Compile bash extension"
-      ansible.builtin.shell:
-        cmd: "cd {{ ansible_env.HOME }}/.rbenv && src/configure && make -C src"
-        creates: "{{ ansible_env.HOME }}/.rbenv/src/realpath.o"
-
-
     - name: "Create Plugins Path"
       file:
         path: "{{ ansible_env.HOME }}/.rbenv/plugins"
@@ -109,3 +103,9 @@
     - name: "Install ruby 2.6.6"
       ansible.builtin.shell:
         cmd: rbenv install 2.6.6
+        creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6"
+
+    - name: "Install rails 6.1.7"
+      ansible.builtin.shell:
+        cmd: fish -i -c 'rbenv shell 2.6.6 && gem install rails -v 6.1.7'
+        creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6/bin/rails"
