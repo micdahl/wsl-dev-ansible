@@ -14,15 +14,6 @@
         cmd: "cd {{ ansible_env.HOME }}/.rbenv && src/configure && make -C src"
         creates: "{{ ansible_env.HOME }}/.rbenv/src/realpath.o"
 
-    - name: "Add rbenv to fish path"
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
-        line: "set -Ux fish_user_paths $HOME/.rbenv/bin $fish_user_paths"
-
-    - name: "rbenv init"
-      ansible.builtin.lineinfile:
-        path: "{{ ansible_env.HOME }}/.config/fish/config.fish"
-        line: "status --is-interactive; and rbenv init - fish | source"
 
     - name: "Create Plugins Path"
       file:
