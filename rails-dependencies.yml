@@ -112,6 +112,15 @@
         cmd: rbenv install 2.6.6
         creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6"
 
+    - name: "Get current ruby version"
+      shell: "cat {{ ansible_env.HOME }}/.rbenv/version"
+      register: file_contents
+
+    - name: "Activate ruby 2.6.6"
+      ansible.builtin.shell:
+        cmd: fish -i -c 'rbenv global 2.6.6'
+      when: file_contents.stdout != '2.6.6'
+
     - name: "Install rails 6.1.7"
       ansible.builtin.shell:
         cmd: fish -i -c 'rbenv shell 2.6.6 && gem install rails -v 6.1.7'
