@@ -1,0 +1,12 @@
+---
+- name: "Install additional resources"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Install zip"
+      become: true
+      ansible.builtin.apt:
+        name: zip
+        state: present
+        update_cache: yes
