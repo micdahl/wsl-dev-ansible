@@ -4,27 +4,11 @@
   connection: local
   become: false
   tasks:
-    - name: "Install python3-venv"
-      become: true
-      ansible.builtin.apt:
-        name: python3-venv
-        state: present
-        update_cache: yes
-
-    - name: "Install fish shell repository"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt_repository:
-        repo: ppa:fish-shell/release-3
-        state: present
-
     - name: "Install fish shell"
       become: true
-      become_method: sudo
-      ansible.builtin.apt:
+      community.general.pacman:
         name: fish
         state: present
-        update_cache: yes
 
     - name: "Set fish as default shell"
       become: true
@@ -61,13 +45,12 @@
     - name: "Install fzf dependencies"
       become: true
       become_method: sudo
-      ansible.builtin.apt:
-        pkg:
+      community.general.pacman:
+        name:
           - fzf
-          - fd-find
+          - fd
           - bat
         state: present
-        update_cache: yes
 
     - name: "Install fzf"
       ansible.builtin.shell:

@@ -7,10 +7,8 @@
 
 ## Preliminaries on the fresh System
 
-1. Set locale to US via `sudo dpkg-reconfigure`
-2. Install pip via `sudo apt update && sudo apt install python3-pip`
-2. Install pip via `python3 -m pip install --user ansible`
-3. Install ansible via `sudo apt install ansible`. Restart shell for ~/.local/bin to be added to bin
+1. Install pip via `python -m ensurepip --upgrade`
+2. Install ansible via `python3 -m pip install --user ansible`
 
 ## Run
 
