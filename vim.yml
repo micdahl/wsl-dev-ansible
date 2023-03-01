@@ -4,30 +4,22 @@
   connection: local
   become: false
   tasks:
-    - name: "Install neovim repository"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt_repository:
-        repo: ppa:neovim-ppa/unstable
-        state: present
-
     - name: "Install neovim"
       become: true
       become_method: sudo
-      ansible.builtin.apt:
-        pkg: 
+      community.general.pacman:
+        name: 
           - neovim
-          - python3-neovim
+          - python-pynvim
         state: present
         update_cache: yes
 
     - name: "Install tools for telescope"
       become: true
       become_method: sudo
-      ansible.builtin.apt:
-        pkg: 
+      community.general.pacman:
+        name: 
           - ripgrep 
-          - fd-find
         state: present
 
     - name: "Python language server"
