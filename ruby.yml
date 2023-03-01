@@ -1,0 +1,20 @@
+---
+- name: "Install ruby"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Checkout rbenv"
+      ansible.builtin.shell:
+        cmd: "git clone https://github.com/rbenv/rbenv.git {{ ansible_env.HOME }}/.rbenv"
+        creates: "{{ ansible_env.HOME }}/.rbenv"
+
+    - name: "Create Plugins Path"
+      file:
+        path: "{{ ansible_env.HOME }}/.rbenv/plugins"
+        state: directory
+
+    - name: "Checkout ruby-build"
+      ansible.builtin.shell:
+        cmd: "git clone https://github.com/rbenv/ruby-build.git {{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
+        creates: "{{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
