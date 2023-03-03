@@ -7,10 +7,9 @@
     - name: "Install tmux"
       become: true
       become_method: sudo
-      ansible.builtin.apt:
+      community.general.pacman:
         name: tmux
         state: present
-        update_cache: yes
 
     - name: "Tmux Plugin Manager"
       ansible.builtin.git:
