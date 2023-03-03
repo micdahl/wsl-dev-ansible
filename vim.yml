@@ -12,7 +12,14 @@
           - neovim
           - python-pynvim
         state: present
-        update_cache: yes
+
+    - name: "Install c compiler"
+      become: true
+      become_method: sudo
+      community.general.pacman:
+        name: 
+          - gcc
+        state: present
 
     - name: "Install tools for telescope"
       become: true
