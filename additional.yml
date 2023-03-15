@@ -8,6 +8,7 @@
       become: true
       community.general.pacman:
         name: 
+          - man
           - make
           - unzip
           - zip

@@ -4,6 +4,17 @@
   connection: local
   become: false
   tasks:
+    - name: "Install dependencies"
+      become: true
+      become_method: sudo
+      community.general.pacman:
+        name: 
+          - base-devel
+          - git
+          - unzip
+        extra_args: "--needed"
+        update_cache: yes
+          
     - name: "Checkout rbenv"
       ansible.builtin.shell:
         cmd: "git clone https://github.com/rbenv/rbenv.git {{ ansible_env.HOME }}/.rbenv"
@@ -19,43 +30,20 @@
         cmd: "git clone https://github.com/rbenv/ruby-build.git {{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
         creates: "{{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
 
-    - name: "Install gem dependencies"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        state: present
-        update_cache: yes
-        pkg:
-          - libffi-dev
-          - libglib2.0-dev
+    - name: "Download google chrome rep"
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/google-chrome.git"
+        dest:  "{{ ansible_env.HOME }}/downloads/google-chrome"
 
-    - name: "Install python 2.7"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: python2.7
-        state: present
-        update_cache: yes
-
-    - name: "Install google chrome package"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        deb: "https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-        state: present
+    - name: "Build and install google chrome package"
+      ansible.builtin.shell:
+        cmd: makepkg -is --noconfirm
+        chdir: "{{ ansible_env.HOME }}/downloads/google-chrome"
 
     - name: "Download chromedriver"
       ansible.builtin.shell:
-        cmd: curl -o {{ ansible_env.HOME }}/downloads/chromedriver.zip https://chromedriver.storage.googleapis.com/$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$(google-chrome --version | egrep -o "[0-9]{3}" | egrep -m 1 -o "[0-9]{3}"))/chromedriver_linux64.zip
+        cmd: curl -o {{ ansible_env.HOME }}/downloads/chromedriver.zip https://chromedriver.storage.googleapis.com/$(curl https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$(google-chrome-stable --version | grep -E -o "[0-9]{3}" | grep -E -m 1 -o "[0-9]{3}"))/chromedriver_linux64.zip
         creates: "{{ ansible_env.HOME }}/downloads/chromedriver.zip"
-
-    - name: "Install unzip"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        state: present
-        name: unzip
-        update_cache: yes
 
     - name: "Unpack"
       ansible.builtin.unarchive:
@@ -63,56 +51,40 @@
         dest: "{{ ansible_env.HOME }}/.local/bin"
         creates: "{{ ansible_env.HOME }}/.local/bin/chromedriver"
 
-    - name: "Install ImageMagick"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: imagemagick
-        state: present
-
-    - name: "Install Poppler Utils for pdf preview"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: poppler-utils
-        state: present
-
-    - name: "Install ruby 2.6.6 dependencies"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: libreadline-dev
-        state: present
-
-    - name: "Install ruby 2.6.6"
+    - name: "Install ruby 3.1.3"
       ansible.builtin.shell:
-        cmd: rbenv install 2.6.6
-        creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6"
+        cmd: rbenv install 3.1.3
+        creates: "{{ ansible_env.HOME }}/.rbenv/versions/3.1.3"
+
+    - name: "Check for version"
+      stat:
+        path: "{{ ansible_env.HOME }}/.rbenv/version"
+      register: version_exists
+
+    - name: "Activate ruby 3.1.3"
+      ansible.builtin.shell:
+        cmd: fish -i -c 'rbenv global 3.1.3'
+      when: not version_exists.stat.exists
 
     - name: "Get current ruby version"
       shell: "cat {{ ansible_env.HOME }}/.rbenv/version"
       register: file_contents
 
-    - name: "Activate ruby 2.6.6"
+    - name: "Activate ruby 3.1.3"
       ansible.builtin.shell:
-        cmd: fish -i -c 'rbenv global 2.6.6'
-      when: file_contents.stdout != '2.6.6'
+        cmd: fish -i -c 'rbenv global 3.1.3'
+      when: file_contents.stdout != '3.1.3'
 
-    - name: "Install rails 6.1.7"
+    - name: "Install rails 7.0.4"
       ansible.builtin.shell:
-        cmd: fish -i -c 'rbenv shell 2.6.6 && gem install rails -v 6.1.7'
-        creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6/bin/rails"
+        cmd: fish -i -c 'rbenv shell 3.1.3 && gem install rails -v 7.0.4'
+        creates: "{{ ansible_env.HOME }}/.rbenv/versions/3.1.3/bin/rails"
 
     - name: "Install mailcatcher"
       ansible.builtin.shell:
-        cmd: fish -i -c 'rbenv shell 2.6.6 && gem install mailcatcher'
-        creates: "{{ ansible_env.HOME }}/.rbenv/versions/2.6.6/bin/mailcatcher"
+        cmd: fish -i -c 'rbenv shell 3.1.3 && gem install mailcatcher'
+        creates: "{{ ansible_env.HOME }}/.rbenv/versions/3.1.3/bin/mailcatcher"
 
     - name: "Enable corepack"
       ansible.builtin.shell:
         cmd: fish -i -c 'nvm use --lts && corepack enable'
-
-    - name: "Install localtunnel"
-      community.general.npm:
-        name: localtunnel
-        global: true
