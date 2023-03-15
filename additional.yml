@@ -6,7 +6,9 @@
   tasks:
     - name: "Install zip"
       become: true
-      ansible.builtin.apt:
-        name: zip
+      community.general.pacman:
+        name: 
+          - make
+          - unzip
+          - zip
         state: present
-        update_cache: yes

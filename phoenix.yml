@@ -1,0 +1,25 @@
+---
+- name: "Install phoenix"
+  hosts: localhost
+  connection: local
+  become: false
+  tasks:
+    - name: "Install elixir"
+      become: true
+      community.general.pacman:
+        name: elixir
+        state: present
+
+    - name: "Install hex"
+      ansible.builtin.shell:
+        cmd: mix local.hex --force
+
+    - name: "Install phoenix"
+      ansible.builtin.shell:
+        cmd: mix archive.install hex phx_new --force
+
+    - name: "Install inotify-tools"
+      become: true
+      community.general.pacman:
+        name: inotify-tools
+        state: present
