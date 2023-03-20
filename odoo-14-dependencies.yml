@@ -4,52 +4,16 @@
   connection: local
   become: false
   tasks:
-    - name: "Install python deadsnakes repository"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt_repository:
-        repo: ppa:deadsnakes/ppa
-        state: present
+    - name: "Import GPG key"
+      ansible.builtin.shell:
+        cmd: gpg --recv-keys E3FF2839C048B25C084DEBE9B26995E310250568
 
-    - name: "Install python 3.8"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: python3.8
-        state: present
-        update_cache: yes
+    - name: "Download python 3.8 rep"
+      ansible.builtin.git:
+        repo: "https://aur.archlinux.org/python38.git"
+        dest:  "{{ ansible_env.HOME }}/downloads/python38"
 
-    - name: "Install python 3.8 venv"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: python3.8-venv
-        state: present
-
-    - name: "Install python 3.8 dev"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: python3.8-dev
-        state: present
-
-    - name: "Add postgresql client"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        name: postgresql-client
-        state: present
-
-    - name: "Add development packages"
-      become: true
-      become_method: sudo
-      ansible.builtin.apt:
-        pkg:
-          - libjpeg-dev
-          - libldap2-dev
-          - libpq-dev
-          - libsasl2-dev
-          - libssl-dev
-          - libxml2-dev
-          - libxslt1-dev
-        state: present
+    - name: "Build and install python 3.8 package"
+      ansible.builtin.shell:
+        cmd: makepkg -is --noconfirm
+        chdir: "{{ ansible_env.HOME }}/downloads/python38"
