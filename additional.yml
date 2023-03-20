@@ -11,5 +11,6 @@
           - man
           - make
           - unzip
+          - postgresql-libs
           - zip
         state: present
