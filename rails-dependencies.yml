@@ -11,6 +11,11 @@
         name: 
           - base-devel
           - git
+          - imagemagick
+          - openslide
+          - libheif
+          - libjxl
+          - libvips
           - unzip
         extra_args: "--needed"
         update_cache: yes
@@ -88,3 +93,8 @@
     - name: "Enable corepack"
       ansible.builtin.shell:
         cmd: fish -i -c 'nvm use --lts && corepack enable'
+
+    - name: "Install localtunnel"
+      community.general.npm:
+        name: localtunnel
+        global: true

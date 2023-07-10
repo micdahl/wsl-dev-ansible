@@ -15,3 +15,9 @@
           - postgresql-libs
           - zip
         state: present
+    - name: "Install xclip"
+      become: true
+      community.general.pacman:
+        name: 
+          - xclip
+        state: present
