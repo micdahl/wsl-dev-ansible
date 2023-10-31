@@ -27,10 +27,10 @@
         cmd: fish -c 'curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher'
         creates: "{{ ansible_env.HOME }}/.config/fish/functions/fisher.fish"
 
-    - name: "Install bobthefish theme"
+    - name: "Install catppuccin theme"
       ansible.builtin.shell:
-        cmd: fish -c 'fisher install oh-my-fish/theme-bobthefish'
-        creates: "{{ ansible_env.HOME }}/.config/fish/functions/bobthefish_display_colors.fish"
+        cmd: fish -c 'fisher install catppuccin/fish && fish_config theme save "Catppuccin Frappe"' 
+        creates: "{{ ansible_env.HOME }}/.config/fish/themes/Catpuccin Frappe.theme"
 
     - name: "Install bass"
       ansible.builtin.shell:
