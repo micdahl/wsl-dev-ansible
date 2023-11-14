@@ -57,3 +57,13 @@
         cmd: fish -c 'fisher install PatrickF1/fzf.fish'
         creates: "{{ ansible_env.HOME }}/.config/fish/conf.d/fzf.fish"
 
+    - name: "Install asdf"
+      ansible.builtin.git:
+        repo: "https://github.com/asdf-vm/asdf.git"
+        branch: "v0.13.1"
+        dest: "{{ ansible_env.HOME }}/.asdf" 
+
+    - name: "asdf completion"
+      ansible.builtin.shell:
+        cmd: fish -c "mkdir -p {{ ansible_env.HOME }}/.config/fish/completions; and ln -s {{ ansible_env.HOME }}/.asdf/completions/asdf.fish {{ ansible_env.HOME }}/.config/fish/completions"
+        creates: "{{ ansible_env.HOME }}/.asdf/completions/asdf.fish"
