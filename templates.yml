@@ -18,6 +18,11 @@
         src: "{{ playbook_dir }}/templates/fish/dotenv.fish"
         dest: "{{ ansible_env.HOME }}/.config/fish/functions/dotenv.fish"
 
+    - name: "add auto venv"
+      ansible.builtin.template:
+        src: "{{ playbook_dir }}/templates/fish/__auto_venv.fish"
+        dest: "{{ ansible_env.HOME }}/.config/fish/functions/__auto_venv.fish"
+
     - name: "add neovim template"
       ansible.builtin.copy:
         src: "{{ playbook_dir }}/templates/neovim/"
