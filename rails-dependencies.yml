@@ -14,26 +14,21 @@
           - imagemagick
           - openslide
           - libheif
+          - libffi
+          - libyaml
           - libjxl
           - libvips
+          - openssl
+          - rust
           - unzip
+          - zlib
         extra_args: "--needed"
         update_cache: yes
-          
-    - name: "Checkout rbenv"
-      ansible.builtin.shell:
-        cmd: "git clone https://github.com/rbenv/rbenv.git {{ ansible_env.HOME }}/.rbenv"
-        creates: "{{ ansible_env.HOME }}/.rbenv"
 
-    - name: "Create Plugins Path"
-      file:
-        path: "{{ ansible_env.HOME }}/.rbenv/plugins"
-        state: directory
-
-    - name: "Checkout ruby-build"
+    - name: "Install asdf ruby plugin"
       ansible.builtin.shell:
-        cmd: "git clone https://github.com/rbenv/ruby-build.git {{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
-        creates: "{{ ansible_env.HOME }}/.rbenv/plugins/ruby-build"
+        cmd: "asdf plugin add ruby https://github.com/asdf-vm/asdf-ruby.git"
+        creates: "{{ ansible_env.HOME }}/.asdf/plugins/ruby"
 
     - name: "Download google chrome rep"
       ansible.builtin.git:
@@ -58,31 +53,16 @@
 
     - name: "Install ruby 3.1.3"
       ansible.builtin.shell:
-        cmd: rbenv install 3.1.3
-        creates: "{{ ansible_env.HOME }}/.rbenv/versions/3.1.3"
-
-    - name: "Check for version"
-      stat:
-        path: "{{ ansible_env.HOME }}/.rbenv/version"
-      register: version_exists
+        cmd: asdf install ruby 3.1.3
+        creates: "{{ ansible_env.HOME }}/.asdf/installs/ruby/3.1.3"
 
     - name: "Activate ruby 3.1.3"
       ansible.builtin.shell:
-        cmd: fish -i -c 'rbenv global 3.1.3'
-      when: not version_exists.stat.exists
-
-    - name: "Get current ruby version"
-      shell: "cat {{ ansible_env.HOME }}/.rbenv/version"
-      register: file_contents
-
-    - name: "Activate ruby 3.1.3"
-      ansible.builtin.shell:
-        cmd: fish -i -c 'rbenv global 3.1.3'
-      when: file_contents.stdout != '3.1.3'
+        cmd: fish -i -c 'asdf global ruby 3.1.3'
 
     - name: "Install rails 7.0.4"
       ansible.builtin.shell:
-        cmd: fish -i -c 'rbenv shell 3.1.3 && gem install rails -v 7.0.4'
+        cmd: fish -i -c 'gem install rails -v 7.0.4'
         creates: "{{ ansible_env.HOME }}/.rbenv/versions/3.1.3/bin/rails"
 
     - name: "Install mailcatcher"
